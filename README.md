@@ -1,2 +1,2 @@
-# CounterBot
-Source code of CounterBot, a Telegram bot
+# TrainCounterBot
+Source code of TrainCounterBot, a Telegram bot.
