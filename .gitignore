@@ -1,0 +1,5 @@
+data
+botenv
+
+*.bat
+*.code-workspace
