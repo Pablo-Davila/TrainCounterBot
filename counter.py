@@ -1,4 +1,7 @@
 
+from datetime import date
+
+
 class Counter():
 
     def __init__(self, cid, ctype, name, increase, value=None, last_update=None):
