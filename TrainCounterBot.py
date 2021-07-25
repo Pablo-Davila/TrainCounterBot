@@ -158,7 +158,7 @@ def send_chained_questions(cid, callback, *questions, delete_all=False, last_mes
         answers.append(answ)
         if delete_all:
             for msg in old_qts+answers:
-                bot.delete_message(cid, msg.id)
+                bot.delete_message(cid, msg.message_id)
         if last_message is not None:
             bot.send_message(cid, last_message)
         callback([a.text for a in answers])
@@ -214,7 +214,7 @@ def send_simple_counter(call):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith("simple"))
 def simple_counter_change(call):
-    mid = call.message.id
+    mid = call.message.message_id
     cid = call.message.chat.id
 
     count = int(call.message.text.split(' ')[-1])
@@ -301,7 +301,7 @@ def display_counter(call):
     bot.edit_message_text(
         text,
         cid,
-        call.message.id,
+        call.message.message_id,
         parse_mode="markdown",
         reply_markup=get_counter_keyboard(name))
 
@@ -320,7 +320,7 @@ def decrease_counter(call):
     bot.edit_message_text(
         text,
         cid,
-        call.message.id,
+        call.message.message_id,
         parse_mode="markdown",
         reply_markup=get_counter_keyboard(name))
 
@@ -337,7 +337,7 @@ def set_counter(call):
             update_counter(cid, counter)
             
             # Update counter message
-            reprint_counter(cid, call.message.id, counter)
+            reprint_counter(cid, call.message.message_id, counter)
         else:
             bot.send_message(cid, "🛑 The new value must be an integer!")
 
@@ -371,7 +371,7 @@ def remove_a_counter(call):
     bot.edit_message_text(
         text,
         cid,
-        call.message.id,
+        call.message.message_id,
         parse_mode="markdown",
         reply_markup=keyboard)
 
@@ -391,12 +391,12 @@ def remove_counter(call):
                 f.write(repr(c)+'\n')
 
     # Update counters list
-    reprint_list(cid, call.message.id)
+    reprint_list(cid, call.message.message_id)
 
 
 @bot.callback_query_handler(lambda call: call.data=="back_to_list")
 def back_to_list(call):
-    reprint_list(call.message.chat.id, call.message.id)
+    reprint_list(call.message.chat.id, call.message.message_id)
 
 
 @bot.message_handler(commands=["git", "github", "source", "src"])
@@ -419,6 +419,10 @@ def command_id(message):
 	cid = message.chat.id
 	bot.send_message(cid,f"Your chat id is {cid}")
 
-
-print("\nRunning TrainCounterBot.py")
-bot.polling()
+try:
+    print("\nRunning TrainCounterBot.py")
+    bot.polling()
+except Exception as e:
+    txt_error = "CATASTROPHIC ERROR: " + str(e)
+    print(txt_error)
+    log_write(txt_error)
