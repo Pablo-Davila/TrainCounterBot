@@ -45,9 +45,6 @@ def get_counters(cid):
                 ))
     except Exception as e:
         ls = []
-        txt_error = f"ERROR: Unable to read counters from chat {cid}. " + str(e)
-        print(txt_error)
-        log_write(txt_error)
 
     return ls
 
@@ -402,4 +399,26 @@ def back_to_list(call):
     reprint_list(call.message.chat.id, call.message.id)
 
 
+@bot.message_handler(commands=["git", "github", "source", "src"])
+def command_github(message):
+	'''Display a link to this bot's code repository.'''
+
+	cid = message.chat.id
+	
+	bot.send_message(
+        cid,
+        "You can find the source code of this bot in "
+        "[GitHub](https://github.com/Pablo-Davila/TrainCounterBot/)",
+        parse_mode='markdown')
+
+
+@bot.message_handler(commands=["id"])
+def command_id(message):
+	'''Display current chat's id.'''
+
+	cid = message.chat.id
+	bot.send_message(cid,f"Your chat id is {cid}")
+
+
+print("\nRunning TrainCounterBot.py")
 bot.polling()
