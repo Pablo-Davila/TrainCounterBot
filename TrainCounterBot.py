@@ -381,8 +381,6 @@ def remove_counter(call):
     cid = call.message.chat.id
     name = get_callback_arguments(call.data)[0]
 
-    print("Para borrar:", name) # TEMP
-
     # Overwrite data
     counters = get_counters(cid)
     with open(f"{path_data}counters_{cid}.csv", "w") as f:
