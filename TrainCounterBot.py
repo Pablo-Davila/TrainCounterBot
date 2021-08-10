@@ -15,8 +15,17 @@ from counter import Counter
 
 bot = telebot.TeleBot(argv[1])
 
-path_data = "data/"
-path_log = f"logs/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}"
+# Determine data and log paths
+path_data = argv[2] if len(argv) > 2 else "data/"
+if not path_data.endswith('/'):
+	path_data += '/'
+
+path_log = argv[3] if len(argv) > 3 else "logs/"
+if not path_log.endswith('/'):
+	path_log += '/'
+path_log += f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}"
+
+# Adapt paths to host OS
 if platform == "win32":
     path_data = path_data.replace("/", "\\")
     path_log = path_log.replace("/", "\\")
