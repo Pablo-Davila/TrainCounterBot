@@ -532,7 +532,7 @@ def command_id(message):
 
 
 try:
-    print("\nRunning TrainCounterBot.py")
+    print("Running TrainCounterBot")
     bot.polling()
 except Exception as e:
     log_write(f"CRITICAL ERROR: {e}")
