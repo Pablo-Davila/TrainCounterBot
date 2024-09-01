@@ -14,38 +14,44 @@ from telebot.types import Message
 from counter import Counter
 
 
-bot = telebot.TeleBot(argv[1])
+DATA_DIR_PATH = os.getenv("DATA_DIR_PATH")
+if DATA_DIR_PATH is None:
+    error_txt = (
+        "ERROR: No data dir provided. Please, set the DATA_DIR_PATH "
+        "environment variable."
+    )
+    print(error_txt)
+    exit(1)
 
-# Determine data and log paths
-path_data = argv[2] if len(argv) > 2 else "data/"
-if not path_data.endswith("/"):
-    path_data += "/"
+LOG_PATH = f"{DATA_DIR_PATH}/counter.log"
 
-path_log = argv[3] if len(argv) > 3 else "logs/"
-if not path_log.endswith("/"):
-    path_log += "/"
-path_log += f"{datetime.now().strftime(" % Y-%m-%d_ % H-%M-%S")}"
+TOKEN = os.getenv("BOT_TOKEN")
+if TOKEN is None:
+    error_txt = (
+        "ERROR: No token provided. Please, set the BOT_TOKEN "
+        "environment variable."
+    )
+    print(error_txt)
+    exit(1)
 
-# Adapt paths to host OS
-if platform == "win32":
-    path_data = path_data.replace("/", "\\")
-    path_log = path_log.replace("/", "\\")
+bot = telebot.TeleBot(TOKEN)
 
 
-def log_write(text):
+def log_write(text: str):
     """Write text to log file."""
 
-    with open(path_log, "a+") as file:
-        file.write(text)
+    log_text = f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}: {text}\n"
+    with open(LOG_PATH, "a+") as file:
+        file.write(log_text)
 
 
 def get_counters(cid):
     """Returns a list with the counters of the specified chat."""
 
-    file_path = f"{path_data}counters_{cid}.csv"
+    file_path = f"{DATA_DIR_PATH}/counters_{cid}.csv"
     if not os.path.exists(file_path):
         return []
-    
+
     ls = []
     try:
         with open(file_path, "r") as file:
@@ -84,7 +90,7 @@ def add_counter(cid, type, name, increase):
                 ),
             )
         else:
-            with open(f"{path_data}counters_{cid}.csv", "a+") as f:
+            with open(f"{DATA_DIR_PATH}/counters_{cid}.csv", "a+") as f:
                 f.write(
                     f"{type};{name};{increase};{increase};{date.today()}\n"
                 )
@@ -100,7 +106,7 @@ def add_counter(cid, type, name, increase):
 
 def update_counter(cid, counter):
     counters = get_counters(cid)
-    with open(f"{path_data}counters_{cid}.csv", "w") as f:
+    with open(f"{DATA_DIR_PATH}/counters_{cid}.csv", "w") as f:
         for c in counters:
             if c.name == counter.name:
                 f.write(repr(counter)+"\n")
@@ -487,7 +493,7 @@ def remove_counter(call):
 
     # Overwrite data
     counters = get_counters(cid)
-    with open(f"{path_data}counters_{cid}.csv", "w") as f:
+    with open(f"{DATA_DIR_PATH}/counters_{cid}.csv", "w") as f:
         for c in counters:
             if c.name != name:
                 f.write(repr(c)+"\n")
