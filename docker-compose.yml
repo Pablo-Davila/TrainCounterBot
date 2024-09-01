@@ -1,0 +1,8 @@
+services:
+  train_counter_bot:
+    container_name: train_counter_bot
+    build: .
+    env_file: .env
+    volumes:
+      - ./data:/data
+    restart: always
