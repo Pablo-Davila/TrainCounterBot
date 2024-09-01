@@ -5,5 +5,5 @@ botenv
 data/
 logs/
 
-*.bat
 *.code-workspace
+*.env
