@@ -7,3 +7,4 @@ logs/
 
 *.code-workspace
 *.env
+!example.env

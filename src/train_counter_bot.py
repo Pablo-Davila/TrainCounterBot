@@ -13,16 +13,7 @@ from telebot.types import Message
 
 from counter import Counter
 
-
-DATA_DIR_PATH = os.getenv("DATA_DIR_PATH")
-if DATA_DIR_PATH is None:
-    error_txt = (
-        "ERROR: No data dir provided. Please, set the DATA_DIR_PATH "
-        "environment variable."
-    )
-    print(error_txt)
-    exit(1)
-
+DATA_DIR_PATH = "/data"
 LOG_PATH = f"{DATA_DIR_PATH}/counter.log"
 
 TOKEN = os.getenv("BOT_TOKEN")
